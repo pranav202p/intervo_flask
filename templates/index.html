@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Detection Status</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #video {
+            border: 2px solid #ccc;
+            border-radius: 10px;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Real-Time Face, Audio, and Object Detection</h1>
+    <img src="{{ url_for('video_feed') }}" id="video" width="320" height="240">
+    
+    <div id="status">
+        <p><strong>Person Verification:</strong> <span id="person_verification">Loading...</span></p>
+        <p><strong>Talking Status:</strong> <span id="talking">Loading...</span></p>
+        <p><strong>People Detected:</strong> <span id="multiple_people">Loading...</span></p>
+        <p><strong>Phone Detection:</strong> <span id="phone_usage">Loading...</span></p>
+    </div>
+
+    <script>
+        function updateStatus() {
+            fetch('/status')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('person_verification').textContent = data.person_verification;
+                    document.getElementById('talking').textContent = data.talking;
+                    document.getElementById('multiple_people').textContent = data.multiple_people;
+                    document.getElementById('phone_usage').textContent = data.phone_usage;
+                });
+        }
+
+        setInterval(updateStatus, 1000);  // Update status every 1 second
+    </script>
+</body>
+</html>
